@@ -1,0 +1,9 @@
+Options -Indexes
+RewriteEngine On
+RewriteRule ^(sources|storages|vendor|.env)/ - [F,L,NC]
+<FilesMatch "sources|storages|vendor|.env">
+    Require all denied
+</FilesMatch>
+
+ServerSignature Off
+

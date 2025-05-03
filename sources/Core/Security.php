@@ -1,0 +1,39 @@
+<?php
+
+namespace MyFinance\Core;
+
+class Security{
+	
+    private static string $input_name;
+    private static string $session_name;
+	
+	public function __construct(){		
+        self::$input_name = Environment::env("csrf_inpname");
+        self::$session_name = Environment::env("csrf_sessname");
+		self::loadCsrf();
+	}
+
+	public static function loadCsrf(){
+        if(empty(get_session(self::$session_name))){
+            set_session(self::$session_name,bin2hex(random_bytes(16)));
+        }
+    }
+
+    public static function csrfField(){
+        echo '<input type="hidden" 
+            style="opacity:0;visibility:hidden;" 
+            name="'.self::$input_name.'" 
+            value="'.get_session(self::$session_name).'">';
+    }
+
+    public static function validateCsrf(){
+        $input = post(self::$input_name);
+        $session = get_session(self::$session_name);
+        if(!empty($input) && !empty($session) && hash_equals($session,$input)){
+            unset_session(self::$session_name);
+            self::loadCsrf();
+            return true;
+        }
+        return false;
+    }
+}
