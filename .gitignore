@@ -1,2 +1,7 @@
 vendor
 .env
+.vscode
+.log
+.sql
+./storages/database/database.db
+./storages/database/database.sqlite

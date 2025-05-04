@@ -1,6 +1,6 @@
 <?php
 
-namespace MyFinance\Core;
+namespace App\Core;
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;

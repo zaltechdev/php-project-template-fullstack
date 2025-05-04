@@ -1,6 +1,6 @@
 <?php
 
-namespace MyFinance\Core;
+namespace App\Core;
 
 use Dotenv\Exception\InvalidEncodingException;
 use Dotenv\Exception\InvalidFileException;

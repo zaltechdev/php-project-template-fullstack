@@ -9,7 +9,7 @@ function js(string $js_name){
 }
 
 function csrf_field(){
-	MyFinance\Core\Security::csrfField();
+	App\Core\Security::csrfField();
 }
 
 function generate_6digit_token(){
@@ -39,7 +39,7 @@ function view_template(string $template_name, array $data = []){
 		require_once $template;
 	}
 	else {
-		MyFinance\Core\Logging::record("error","View template file $template_name does not exist or invalid name!", "view_template()");
+		App\Core\Logging::record("error","View template file $template_name does not exist or invalid name!", "view_template()");
 	}
 	return;
 }
@@ -59,5 +59,5 @@ function global_assets(array $css, array $js){
 }
 
 function get_app_name(){
-	return MyFinance\Core\Environment::env("app_name");
+	return App\Core\Environment::env("app_name");
 }

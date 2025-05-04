@@ -1,6 +1,6 @@
 <?php
 
-namespace MyFinance\Core;
+namespace App\Core;
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;

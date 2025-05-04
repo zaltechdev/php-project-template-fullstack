@@ -1,5 +1,5 @@
 {
-    "name": "zaltechdev/myfinance",
+    "name": "zaltechdev/template-app",
     "type": "project",
     "require": {
         "monolog/monolog": "^3.9",
@@ -9,7 +9,7 @@
     },
     "autoload": {
         "psr-4": {
-            "MyFinance\\": "sources/"
+            "App\\": "sources/"
         }
     },
     "authors": [

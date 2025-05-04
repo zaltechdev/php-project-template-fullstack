@@ -1,6 +1,6 @@
 <?php
 
-namespace MyFinance\Core;
+namespace App\Core;
 
 use MiladRahimi\PhpCrypt\Exceptions\InvalidKeyException;
 use MiladRahimi\PhpCrypt\Exceptions\MethodNotSupportedException;

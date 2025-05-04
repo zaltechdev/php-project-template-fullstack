@@ -1,6 +1,6 @@
 <?php
 
-namespace MyFinance\Core;
+namespace App\Core;
 
 class Database{
 
@@ -12,7 +12,7 @@ class Database{
         Logging::record("error",$message,self::class);
         self::$result['status'] = false;
     }
-
+    
     public function __construct(){
         if(self::$db == null){
             try{
