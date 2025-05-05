@@ -14,16 +14,16 @@ class Logging{
 
     public function __construct(){
         try{			
-			$mode = Environment::env("app_mode");
-			if($mode === APP_MODE_PROD){
+			$mode = Environment::env("App_mode");
+			if($mode === App_MODE_PROD){
 				$this->turnOffErrorDisplay();
 			}
-			else if($mode === APP_MODE_MAIN){
+			else if($mode === App_MODE_MAIN){
 				$this->turnOffErrorDisplay();
 				Routing::unavailable();
 			}
 		
-            $timezone = Environment::env("app_timezone");
+            $timezone = Environment::env("App_timezone");
             if(!in_array($timezone,timezone_identifiers_list())){
                 throw new \Exception("Invalid timezone setting value!");
             }

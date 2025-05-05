@@ -22,8 +22,8 @@ new Security();
 new Crypto();
 new Mailer();
 
-$app = new Routing();
+$App = new Routing();
 
 require_once __DIR__ . "/routes.php";
 
-$app->run();
+$App->run();

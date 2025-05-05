@@ -1,14 +1,14 @@
 <?php
 
-function post(string $key){
+function post(string $key):string{
 	return htmlspecialchars($_POST[$key] ?? "");
 }
 
-function get(string $key){
+function get(string $key):string{
 	return htmlspecialchars($_GET[$key] ?? "");
 }
 
-function posts(array $keys){
+function posts(array $keys):array{
 	$data = [];
 	foreach($keys as $key){
 		$data[$key] = post($key);
@@ -17,7 +17,7 @@ function posts(array $keys){
 	return $data;
 }
 
-function gets(array $keys){
+function gets(array $keys):array{
 	$data = [];
 	foreach($keys as $key){
 		$data[$key] = get($key);
@@ -26,15 +26,26 @@ function gets(array $keys){
 	return $data;
 }
 
-function set_session(string $key, mixed $value){
+function set_session(string $key, mixed $value):void{
 	$_SESSION[$key] = $value;
 }
 
-function unset_session(string $key){
+function unset_session(string $key):void{
 	unset($_SESSION[$key]);
 }
 
-function get_session(string $key){
+function get_session(string $key):mixed{
 	return $_SESSION[$key] ?? "";
 }
 
+function set_cookie(string $key, mixed $value, int | array | bool $options = []):void{
+	setcookie($key,$value,$options);
+}
+
+function unset_cookie(string $key):void{
+	setcookie($key,"",0);
+}
+
+function get_cookie(string $key):mixed{
+	return $_COOKIE[$key] ?? "";
+}

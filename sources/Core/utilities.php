@@ -58,6 +58,52 @@ function global_assets(array $css, array $js){
 	}
 }
 
-function get_app_name(){
-	return App\Core\Environment::env("app_name");
+function get_App_name(){
+	return App\Core\Environment::env("App_name");
+}
+
+
+function get_user_device_info(){
+
+	$user_agent = $_SERVER['HTTP_USER_AGENT'];
+	$device = "";
+
+    $os_types = [
+        "Android"       => "/android/i",
+        "iOS"           => "/iphone|ipad|ipod/i",
+        "Windows Phone" => "/windows phone/i",
+        "Windows 11"    => "/windows nt 10.0/i",
+        "Windows 10"    => "/windows nt 10/i",
+        "Windows 8.1"   => "/windows nt 6.3/i",
+        "Windows 8"     => "/windows nt 6.2/i",
+        "Windows 7"     => "/windows nt 6.1/i",
+        "Windows Vista" => "/windows nt 6.0/i",
+        "Windows XP"    => "/windows nt 5.1|windows xp/i",
+        "Mac OS X"      => "/macintosh|mac os x/i",
+        "Linux"         => "/linux/i",
+        "BlackBerry"    => "/blackberry/i",
+        "Chrome OS"     => "/cros/i",
+    ];
+
+	$lower_case_user_agent = strtolower($user_agent);
+	if (preg_match("/tablet|ipad/", $lower_case_user_agent)) {
+		$device .= 'Tablet - ';
+	} 
+	else if (preg_match("/mobile|iphone|ipod|android|blackberry|phone|windows phone/", $lower_case_user_agent)) {
+		$device .= "Mobile - ";
+	}
+	else {
+		$device .= "Desktop - ";
+	}
+
+	foreach($os_types as $type => $regex){
+		if(preg_match($regex,$user_agent)){
+			$device .= $type;
+		}
+		else{
+			$device .= "Unknown OS";
+		}
+	}
+
+	return $device;
 }

@@ -1,6 +1,6 @@
 <?php
 
-function view(string $name, array $data = [], int $code = 200){
+function view(string $name, array $data = [], int $code = 200):array{
 	return [
 		"view" => [
 			"data" => $data,
@@ -10,10 +10,15 @@ function view(string $name, array $data = [], int $code = 200){
 	];
 }
 
-function redirect(string $path){
+function redirect(string $path):array{
 	return ["redirect" => $path];
 }
 
-function showFile(string $file_name){
-	return ["file" => $file_name];
+function json(array $data, int $code = 200){
+	return [
+		"json" => [
+			"message" => $data,
+			"code" => $code
+		]
+	];
 }

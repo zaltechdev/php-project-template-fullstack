@@ -9,7 +9,7 @@ class Routing {
 	private string $base_url;
 	private array $routes = [];
 
-	private static function catchRouterError(string $message){
+	private static function catchRouterError(string $message):void{
 		Logging::record("error",$message,self::class);
 	}
 	
@@ -19,7 +19,7 @@ class Routing {
 		$this->base_url = Environment::env("base_url");
 	}
 	
-	public static function notFound(){
+	public static function notFound():never{
 		http_response_code(404);
 		$notfound = VIEW_ERRORS_PATH . "404.php";
 		if(file_exists($notfound)){
@@ -30,7 +30,7 @@ class Routing {
 		
 	}
 	
-	public static function methodNotAllowed(){
+	public static function methodNotAllowed():never{
 		http_response_code(405);
 		$method_error = VIEW_ERRORS_PATH . "405.php";
 		if(file_exists($method_error)){
@@ -41,7 +41,7 @@ class Routing {
 		
 	}
 	
-	public static function internalError(){
+	public static function internalError():never{
 		http_response_code(500);
 		$internal_error = VIEW_ERRORS_PATH . "500.php";
 		if(file_exists($internal_error)){
@@ -52,7 +52,7 @@ class Routing {
 		
 	}
 	
-	public static function unavailable(){
+	public static function unavailable():never{
 		http_response_code(503);
 		$unavailable = VIEW_ERRORS_PATH . "503.php";
 		if(file_exists(filename: $unavailable)){
@@ -63,7 +63,7 @@ class Routing {
 		
 	}
 
-	private function buildRoute(string $http_method, string $path, array $controller){
+	private function buildRoute(string $http_method, string $path, array $controller):void{
 		if(hash_equals($http_method,$this->http_method)){
 			$this->routes[] = [
 				"path" => $path,
@@ -72,16 +72,35 @@ class Routing {
 		}
 	}
 
-	public function get(string $path, array $controller){
+	public function get(string $path, array $controller):void{
 		$this->buildRoute("GET",$path,$controller);
 	}
 	
-	public function post(string $path, array $controller){
+	public function post(string $path, array $controller):void{
 		$this->buildRoute("POST",$path,$controller);
 	}
 	
-	public function run(){
-		
+	public function put(string $path, array $controller):void{
+		$this->buildRoute("PUT",$path,$controller);
+	}
+	
+	public function delete(string $path, array $controller):void{
+		$this->buildRoute("DELETE",$path,$controller);
+	}
+
+	private function headers(){
+		header("Access-Control-Allow-Origin:" . $this->base_url);
+		header("Access-Control-Allow-Methods:GET,POST,PUT,DELETE,OPTIONS");
+		header("Access-Control-Allow-Headers:Content-Type,Authorization");
+
+		if ($this->http_method === "OPTIONS") {
+			http_response_code(200);
+			exit;
+		}
+	}
+	
+	public function run():void{
+		$this->headers();
 		foreach($this->routes as $route){
 			if(hash_equals($route['path'],$this->uri)){
 
@@ -96,9 +115,18 @@ class Routing {
 				$controller = new $controller_class();
 				$return = $controller->$controller_method();
 				
-				if(isset($return['view'])){
+				if(isset($return['redirect'])){
+					$trimmed_redirect_path = rtrim($this->base_url,"/") . "/" . ltrim($return['redirect'],"/");
+					header("location:" . $trimmed_redirect_path);
+				}
+				else if(isset($return['json'])){
+					header("Content-Type:Application/json");
+					http_response_code($return['json']['code'] ?? 200);
+					echo json_encode($return['json']);
+				}
+				else if(isset($return['view'])){
 					header("Content-Type:text/html");
-					http_response_code($return['view']['code']);
+					http_response_code($return['view']['code'] ?? 200);
 					
 					$view = VIEW_MAIN_PATH . $return['view']['name'] . ".php";
 					if(!file_exists($view)){
@@ -108,10 +136,6 @@ class Routing {
 					
 					extract($return['view']['data']);
 					require_once $view; 
-				}
-				else if(isset($return['redirect'])){
-					$trimmed_redirect_path = rtrim($this->base_url,"/") . "/" . ltrim($return['redirect'],"/");
-					header("location:" . $trimmed_redirect_path);
 				}
 				else if(isset($return['file'])){
 					$uploaded_file = UPLOAD_DIR . $return['file'];

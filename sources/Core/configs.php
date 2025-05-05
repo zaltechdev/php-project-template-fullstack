@@ -12,5 +12,5 @@ const VIEW_TEMPLATES_PATH 		= __DIR__ . "/../views/templates/";
 const VIEW_ERRORS_PATH   		= __DIR__ . "/../views/errors/";
 const ENCRYPT_METHOD			= "aes-256-cbc";
 const DATABASE_DRIVER_PREFIX 	= "sqlite:";
-const APP_MODE_PROD				= "production";
-const APP_MODE_MAIN				= "maintenance";
+const App_MODE_PROD				= "production";
+const App_MODE_MAIN				= "maintenance";
