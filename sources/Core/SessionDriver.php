@@ -34,7 +34,7 @@ class SessionDriver implements SessionHandlerInterface{
 	}
 
 	public function write(string $id, string $data):bool{
-		$write = Database::query(self::SESSION_WRITE_QUERY, [$id, time(), $data])->result();
+		$write = Database::query(self::SESSION_WRITE_QUERY, [$id, time(), $data, get_user_device_info()])->result();
 		return $write['status'];
 	}
 

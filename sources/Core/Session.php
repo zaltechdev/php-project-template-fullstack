@@ -18,6 +18,12 @@ class Session{
             else if(!session_name(Environment::env("session_cookie_idname"))){
                 throw new \Exception("Failed to set session id name!");                
             }
+            else if(!session_set_cookie_params([
+                "httponly" => true,
+                "samesite" => "Strict"
+            ])){
+                throw new \Exception("Failed to set PHP session cookie params!");
+            }
             else if($status === PHP_SESSION_NONE){
                 if(!session_start()){
                     throw new \Exception("Failed to start session!");

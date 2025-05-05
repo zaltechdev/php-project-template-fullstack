@@ -12,5 +12,15 @@ const VIEW_TEMPLATES_PATH 		= __DIR__ . "/../views/templates/";
 const VIEW_ERRORS_PATH   		= __DIR__ . "/../views/errors/";
 const ENCRYPT_METHOD			= "aes-256-cbc";
 const DATABASE_DRIVER_PREFIX 	= "sqlite:";
-const App_MODE_PROD				= "production";
-const App_MODE_MAIN				= "maintenance";
+const app_MODE_PROD				= "production";
+const app_MODE_MAIN				= "maintenance";
+
+const HTTP_OK                   = 200;
+const HTTP_NO_CONTENT           = 204;
+const HTTP_BAD_REQUEST          = 400;
+const HTTP_UNAUTHORIZED         = 401;
+const HTTP_FORBIDDEN            = 403;
+const HTTP_NOT_FOUND            = 404;
+const HTTP_METHOD_NOT_ALLOWED   = 405;
+const HTTP_INTERNAL_ERROR       = 500;
+const HTTP_SERVICE_UNAVAILABLE  = 503;

@@ -6,4 +6,6 @@ RewriteRule ^(sources|storages|vendor|.env)/ - [F,L,NC]
 </FilesMatch>
 
 ServerSignature Off
+ServerTokens Prod
+
 

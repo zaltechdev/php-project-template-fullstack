@@ -58,8 +58,8 @@ function global_assets(array $css, array $js){
 	}
 }
 
-function get_App_name(){
-	return App\Core\Environment::env("App_name");
+function get_app_name(){
+	return App\Core\Environment::env("app_name");
 }
 
 

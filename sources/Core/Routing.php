@@ -20,8 +20,8 @@ class Routing {
 	}
 	
 	public static function notFound():never{
-		http_response_code(404);
-		$notfound = VIEW_ERRORS_PATH . "404.php";
+		http_response_code(HTTP_NOT_FOUND);
+		$notfound = VIEW_ERRORS_PATH . HTTP_NOT_FOUND . ".php";
 		if(file_exists($notfound)){
 			require_once $notfound;
 			die();
@@ -31,8 +31,8 @@ class Routing {
 	}
 	
 	public static function methodNotAllowed():never{
-		http_response_code(405);
-		$method_error = VIEW_ERRORS_PATH . "405.php";
+		http_response_code(HTTP_METHOD_NOT_ALLOWED);
+		$method_error = VIEW_ERRORS_PATH . HTTP_METHOD_NOT_ALLOWED . ".php";
 		if(file_exists($method_error)){
 			require_once $method_error;
 			die();
@@ -42,8 +42,8 @@ class Routing {
 	}
 	
 	public static function internalError():never{
-		http_response_code(500);
-		$internal_error = VIEW_ERRORS_PATH . "500.php";
+		http_response_code(HTTP_INTERNAL_ERROR);
+		$internal_error = VIEW_ERRORS_PATH . HTTP_INTERNAL_ERROR . ".php";
 		if(file_exists($internal_error)){
 			require_once $internal_error;
 			die();
@@ -53,14 +53,43 @@ class Routing {
 	}
 	
 	public static function unavailable():never{
-		http_response_code(503);
-		$unavailable = VIEW_ERRORS_PATH . "503.php";
-		if(file_exists(filename: $unavailable)){
+		http_response_code(HTTP_SERVICE_UNAVAILABLE);
+		$unavailable = VIEW_ERRORS_PATH . HTTP_SERVICE_UNAVAILABLE . ".php";
+		if(file_exists($unavailable)){
 			require_once $unavailable;
 			die();
 		} 
 		die("<center><h2>503 Service Unavailable</h2></center>");
-		
+	}
+	
+	public static function forbidden():never{
+		http_response_code(HTTP_FORBIDDEN);
+		$forbidden = VIEW_ERRORS_PATH . HTTP_FORBIDDEN . ".php";
+		if(file_exists($forbidden)){
+			require_once $forbidden;
+			die();
+		} 
+		die("<center><h2>403 Forbidden</h2></center>");
+	}
+	
+	public static function badRequest():never{
+		http_response_code(HTTP_BAD_REQUEST);
+		$bad_request = VIEW_ERRORS_PATH . HTTP_BAD_REQUEST . ".php";
+		if(file_exists($bad_request)){
+			require_once $bad_request;
+			die();
+		} 
+		die("<center><h2>400 Bad Request</h2></center>");
+	}
+	
+	public static function unauthorized():never{
+		http_response_code(HTTP_UNAUTHORIZED);
+		$unauthorized = VIEW_ERRORS_PATH . HTTP_UNAUTHORIZED . ".php";
+		if(file_exists($unauthorized)){
+			require_once $unauthorized;
+			die();
+		} 
+		die("<center><h2>401 Unauthorized</h2></center>");
 	}
 
 	private function buildRoute(string $http_method, string $path, array $controller):void{
@@ -92,6 +121,7 @@ class Routing {
 		header("Access-Control-Allow-Origin:" . $this->base_url);
 		header("Access-Control-Allow-Methods:GET,POST,PUT,DELETE,OPTIONS");
 		header("Access-Control-Allow-Headers:Content-Type,Authorization");
+		header_remove("X-Powered-By");
 
 		if ($this->http_method === "OPTIONS") {
 			http_response_code(200);
@@ -118,11 +148,13 @@ class Routing {
 				if(isset($return['redirect'])){
 					$trimmed_redirect_path = rtrim($this->base_url,"/") . "/" . ltrim($return['redirect'],"/");
 					header("location:" . $trimmed_redirect_path);
+					exit;
 				}
 				else if(isset($return['json'])){
 					header("Content-Type:Application/json");
 					http_response_code($return['json']['code'] ?? 200);
 					echo json_encode($return['json']);
+					exit;
 				}
 				else if(isset($return['view'])){
 					header("Content-Type:text/html");
@@ -136,6 +168,7 @@ class Routing {
 					
 					extract($return['view']['data']);
 					require_once $view; 
+					exit;
 				}
 				else if(isset($return['file'])){
 					$uploaded_file = UPLOAD_DIR . $return['file'];
@@ -152,8 +185,8 @@ class Routing {
 							self::internalError();
 						}
 					}
+					exit;
 				}
-				exit;
 			}
 		}
 		
