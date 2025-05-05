@@ -10,7 +10,9 @@ class Session{
             if($status === PHP_SESSION_DISABLED){
                 throw new \Exception("PHP session currently disabled!");
             }
-            else if(!session_set_save_handler(new SessionDriver(),true)){
+            
+            $driver = new SessionDriver();
+            if(!session_set_save_handler($driver,true)){
                 throw new \Exception("Failed to set session handler!");
             }
             else if(!session_name(Environment::env("session_cookie_idname"))){
@@ -22,6 +24,9 @@ class Session{
                 }
                 if(!session_regenerate_id(true)){
                     throw new \Exception("Failed to regenerate session id!");
+                }
+                if(!$driver->gc()){
+                    throw new \Exception("Failed to execute session garbage collection!");
                 }
             }
         }

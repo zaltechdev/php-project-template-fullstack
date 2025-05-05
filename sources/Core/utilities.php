@@ -96,14 +96,15 @@ function get_user_device_info(){
 		$device .= "Desktop - ";
 	}
 
+	$type_os = "Unknown OS";
+
 	foreach($os_types as $type => $regex){
 		if(preg_match($regex,$user_agent)){
-			$device .= $type;
-		}
-		else{
-			$device .= "Unknown OS";
+			$type_os = $type;
 		}
 	}
 
+	$device .= $type_os;
+	
 	return $device;
 }

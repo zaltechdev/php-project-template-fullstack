@@ -43,7 +43,7 @@ class SessionDriver implements SessionHandlerInterface{
 		return $destroy['status'];
 	}
 
-	public function gc(int $maxlifetime):int|false{
+	public function gc(int $maxlifetime = 1440):int|false{
 		$gc = Database::query(self::SESSION_GC_QUERY, [time() - $maxlifetime])->result();
 		return $gc['status'];
 	}
