@@ -6,9 +6,9 @@ use SessionHandlerInterface;
 
 class SessionDriver implements SessionHandlerInterface{
 
-	private const string SESSION_CREATE_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS `session_store` (id TEXT PRIMARY KEY NOT NULL, access INTEGER NOT NULL, data TEXT)";
+	private const string SESSION_CREATE_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS `session_store` (id TEXT PRIMARY KEY NOT NULL, access INTEGER NOT NULL, data TEXT, device TEXT)";
 	private const string SESSION_READ_QUERY = "SELECT data FROM `session_store` WHERE id = ?";
-	private const string SESSION_WRITE_QUERY = "INSERT INTO `session_store` (id, access, data) VALUES (?, ?, ?) ";
+	private const string SESSION_WRITE_QUERY = "INSERT INTO `session_store` (id, access, data, device) VALUES (?, ?, ?, ?) ";
 	private const string SESSION_DESTROY_QUERY = "DELETE FROM `session_store` WHERE id = ?";
 	private const string SESSION_GC_QUERY = "DELETE FROM `session_store` WHERE access < ?";
 
