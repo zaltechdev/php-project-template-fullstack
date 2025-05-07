@@ -33,11 +33,9 @@ class Security{
     public static function validateCsrf():bool{
         $input = post(self::$input_name);
         $session = self::getCsrf();
-        if(!empty($input) && !empty($session) && hash_equals($session,$input)){
-            unset_session(self::$session_name);
-            self::loadCsrf();
-            return true;
-        }
-        return false;
+        $is_valid = !empty($input) && !empty($session) && hash_equals($session,$input);
+        unset_session(self::$session_name);
+        self::loadCsrf();
+        return $is_valid;
     }
 }

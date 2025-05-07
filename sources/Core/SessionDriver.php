@@ -13,7 +13,7 @@ class SessionDriver implements SessionHandlerInterface{
 	private const string SESSION_GC_QUERY = "DELETE FROM `session_store` WHERE access < ?";
 
 	public function __construct(){
-		$create = Database::query(self::SESSION_CREATE_TABLE_QUERY)->fetchAll()->result();
+		$create = Database::query(self::SESSION_CREATE_TABLE_QUERY)->result();
 		if(!$create['status']){
 			Logging::record("error","Failed to create session table!",self::class);
 			Routing::internalError();
@@ -44,7 +44,7 @@ class SessionDriver implements SessionHandlerInterface{
 	}
 
 	public function gc(int $maxlifetime = 1440):int|false{
-		$gc = Database::query(self::SESSION_GC_QUERY, [time() - $maxlifetime])->result();
+		$gc = Database::query(self::SESSION_GC_QUERY, [(time() - $maxlifetime)])->result();
 		return $gc['status'];
 	}
 }

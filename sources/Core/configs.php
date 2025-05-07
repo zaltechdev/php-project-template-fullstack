@@ -10,8 +10,6 @@ const SESSION_DIR 				= __DIR__ . "/../../storages/sessions/";
 const VIEW_MAIN_PATH      		= __DIR__ . "/../views/main/";
 const VIEW_TEMPLATES_PATH 		= __DIR__ . "/../views/templates/";
 const VIEW_ERRORS_PATH   		= __DIR__ . "/../views/errors/";
-const ENCRYPT_METHOD			= "aes-256-cbc";
-const DATABASE_DRIVER_PREFIX 	= "sqlite:";
 const app_MODE_PROD				= "production";
 const app_MODE_MAIN				= "maintenance";
 

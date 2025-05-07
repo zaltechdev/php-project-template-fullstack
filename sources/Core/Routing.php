@@ -118,7 +118,7 @@ class Routing {
 	}
 
 	private function headers(){
-		header("Access-Control-Allow-Origin:" . $this->base_url);
+		header("Access-Control-Allow-Origin:$this->base_url");
 		header("Access-Control-Allow-Methods:GET,POST,PUT,DELETE,OPTIONS");
 		header("Access-Control-Allow-Headers:Content-Type,Authorization");
 		header_remove("X-Powered-By");
@@ -147,7 +147,7 @@ class Routing {
 				
 				if(isset($return['redirect'])){
 					$trimmed_redirect_path = rtrim($this->base_url,"/") . "/" . ltrim($return['redirect'],"/");
-					header("location:" . $trimmed_redirect_path);
+					header("location:$trimmed_redirect_path");
 					exit;
 				}
 				else if(isset($return['json'])){
