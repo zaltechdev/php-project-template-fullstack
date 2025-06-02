@@ -30,8 +30,9 @@ class Session{
                 }
                 if(!session_regenerate_id(true)){
                     throw new \Exception("Failed to regenerate session id!");
-                }
-                if(!$driver->gc()){
+                }      
+                $gc = $driver->gc();
+                if(is_bool($gc) && $gc == false){
                     throw new \Exception("Failed to execute session garbage collection!");
                 }
             }

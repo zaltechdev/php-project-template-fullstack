@@ -15,10 +15,10 @@ class Logging{
     public function __construct(){
         try{			
 			$mode = Environment::env("app_mode");
-			if($mode === app_MODE_PROD){
+			if($mode === APP_MODE_PROD){
 				$this->turnOffErrorDisplay();
 			}
-			else if($mode === app_MODE_MAIN){
+			else if($mode === APP_MODE_MAIN){
 				$this->turnOffErrorDisplay();
 				Routing::unavailable();
 			}

@@ -92,7 +92,7 @@ class Routing {
 		die("<center><h2>401 Unauthorized</h2></center>");
 	}
 
-	private function buildRoute(string $http_method, string $path, array $controller):void{
+	private function buildRoute(string $http_method, string $path, array | callable $controller):void{
 		if(hash_equals($http_method,$this->http_method)){
 			$this->routes[] = [
 				"path" => $path,
@@ -101,32 +101,16 @@ class Routing {
 		}
 	}
 
-	public function get(string $path, array $controller):void{
+	public function get(string $path, array | callable $controller):void{
 		$this->buildRoute("GET",$path,$controller);
 	}
 	
-	public function post(string $path, array $controller):void{
+	public function post(string $path, array | callable $controller):void{
 		$this->buildRoute("POST",$path,$controller);
-	}
-	
-	public function put(string $path, array $controller):void{
-		$this->buildRoute("PUT",$path,$controller);
-	}
-	
-	public function delete(string $path, array $controller):void{
-		$this->buildRoute("DELETE",$path,$controller);
 	}
 
 	private function headers(){
-		header("Access-Control-Allow-Origin:$this->base_url");
-		header("Access-Control-Allow-Methods:GET,POST,PUT,DELETE,OPTIONS");
-		header("Access-Control-Allow-Headers:Content-Type,Authorization");
 		header_remove("X-Powered-By");
-
-		if ($this->http_method === "OPTIONS") {
-			http_response_code(200);
-			exit;
-		}
 	}
 	
 	public function run():void{
@@ -134,26 +118,26 @@ class Routing {
 		foreach($this->routes as $route){
 			if(hash_equals($route['path'],$this->uri)){
 
-				$controller_class = $route['controller'][0] ?? "";
-				$controller_method = $route['controller'][1] ?? "";
-				
-				if(!class_exists($controller_class) || !method_exists($controller_class,$controller_method)){
-					self::catchRouterError("Class controller or method controller does not exist!");
-					self::internalError();
+				if(!is_callable($route['controller'])){
+					$controller_class = $route['controller'][0] ?? "";
+					$controller_method = $route['controller'][1] ?? "";
+					
+					if(!class_exists($controller_class) || !method_exists($controller_class,$controller_method)){
+						self::catchRouterError("Class controller or method controller does not exist!");
+						self::internalError();
+					}
+					
+					$controller = new $controller_class();
+					$return = $controller->$controller_method();
 				}
-				
-				$controller = new $controller_class();
-				$return = $controller->$controller_method();
+				else{
+					$controller_function = $route['controller'];
+					$return = $controller_function();
+				}
 				
 				if(isset($return['redirect'])){
 					$trimmed_redirect_path = rtrim($this->base_url,"/") . "/" . ltrim($return['redirect'],"/");
 					header("location:$trimmed_redirect_path");
-					exit;
-				}
-				else if(isset($return['json'])){
-					header("Content-Type:Application/json");
-					http_response_code($return['json']['code'] ?? 200);
-					echo json_encode($return['json']);
 					exit;
 				}
 				else if(isset($return['view'])){

@@ -13,19 +13,19 @@ class Security{
         self::loadCsrf();
 	}
 
-	public static function loadCsrf():void{
+	private static function loadCsrf():void{
         if(empty(get_session(self::$session_name))){
             set_session(self::$session_name,bin2hex(random_bytes(16)));
         }
     }
 
-    public static function getCsrf():string{
+    private static function getCsrf():string{
         return get_session(self::$session_name);
     }
 
     public static function csrfField():void{
         echo '<input type="hidden" 
-            style="opacity:0;visibility:hidden;" 
+            style="opacity:0;visibility:hidden;" id="csrf-field"
             name="'.self::$input_name.'" 
             value="'.self::getCsrf().'">';
     }

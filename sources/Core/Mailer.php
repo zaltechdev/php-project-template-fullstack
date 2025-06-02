@@ -8,35 +8,26 @@ use PHPMailer\PHPMailer\SMTP;
 
 class Mailer{
 
-    private static $hostname;
-    private static $username;
-    private static $password;
-    private static $portnumber;
-    private static $sendername;
-
-    public function __construct(){
-        self::$hostname = Environment::env("mailer_hostname");
-        self::$username = Environment::env("mailer_username");
-        self::$password = Environment::env("mailer_password");
-        self::$portnumber = Environment::env("mailer_portnumber");
-        self::$sendername = Environment::env("mailer_sendername");
-    }
-
-    public static function send(string $recepient, string $subject, string $message){
+    public static function send(string $recepient, string $subject, string $message): bool{
+        $hostname = Environment::env("mailer_hostname");
+        $username = Environment::env("mailer_username");
+        $password = Environment::env("mailer_password");
+        $portnumber = Environment::env("mailer_portnumber");
+        $sendername = Environment::env("mailer_sendername");
 
         $mail = new PHPMailer(true);
 
         try{
             $mail->SMTPDebug = SMTP::DEBUG_OFF;
             $mail->isSMTP();
-            $mail->Host       = self::$hostname;
+            $mail->Host       = $hostname;
             $mail->SMTPAuth   = true;
-            $mail->Username   = self::$username;
-            $mail->Password   = self::$password;
+            $mail->Username   = $username;
+            $mail->Password   = $password;
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-            $mail->Port       = self::$portnumber;
+            $mail->Port       = $portnumber;
             
-            $mail->setFrom(self::$username,self::$sendername);
+            $mail->setFrom($username,$sendername);
             $mail->addAddress($recepient);
 
             $mail->isHTML(true);

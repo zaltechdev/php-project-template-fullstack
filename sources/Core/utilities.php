@@ -32,18 +32,6 @@ function validate_submit_button(string $button_name, string $button_value){
     return hash_equals($button_value,post($button_name));
 }
 
-function view_template(string $template_name, array $data = []){
-	$template = VIEW_TEMPLATES_PATH . "$template_name.php";
-	if(file_exists($template)){
-		extract($data);
-		require_once $template;
-	}
-	else {
-		App\Core\Logging::record("error","View template file $template_name does not exist or invalid name!", "view_template()");
-	}
-	return;
-}
-
 function global_assets(array $css, array $js){
 	if(!empty($css)){
 		foreach($css as $style){
